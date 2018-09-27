@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfr.web.corporation.sql.CorporationMapper">
+
+<select id="select" resultType="map" parameterType="map">
+	<if test="search != null">		<!-- 메인창 ajax 검색용 -->
+		SELECT * FROM cor_info
+				WHERE c_name LIKE CONCAT('%', #{search}, '%')
+	</if>
+	<if test="c_name != null">
+		SELECT * FROM cor_info
+				WHERE c_name = #{c_name}
+	</if>
+	<if test="c_no != null">
+		SELECT * FROM cor_info
+				WHERE c_no = #{c_no}
+	</if>
+	<if test="type_codes != null">	<!-- 연관 기업을 가져오기 위해-->
+		SELECT c_no ,c_name FROM cor_info
+				WHERE type_code = #{type_codes}
+				AND c_no != #{c_nos}
+	</if>
+	<if test="type_code != null">	<!-- 컨트롤러에서 타입명가져오기 위해-->
+		SELECT * FROM type_code
+				WHERE type_code = #{type_code}
+	</if>
+</select>
+<select id="selectD" resultType="map" parameterType="map">
+	SELECT cor_detail.title, cor_detail.c_2016, cor_detail.c_2015, cor_detail.c_2014
+	FROM cor_info, cor_detail
+	WHERE cor_detail.c_no = cor_info.c_no and cor_detail.c_no = (SELECT c_no FROM cor_info WHERE c_no = #{c_no })
+</select>
+<select id="selectF" resultType="map" parameterType="map">
+	SELECT f_ratio, f_2016, f_2015, f_2014
+	FROM fin_info
+	WHERE fin_info.type_code = #{type_code}
+</select>
+
+
+</mapper>

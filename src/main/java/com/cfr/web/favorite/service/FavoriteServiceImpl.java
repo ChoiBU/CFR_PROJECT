@@ -1,0 +1,57 @@
+package com.cfr.web.favorite.service;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.cfr.web.favorite.dao.FavoriteDao;
+
+@Service
+public class FavoriteServiceImpl implements FavoriteService{
+
+	@Autowired FavoriteDao favoriteDao;
+	
+	@Override
+	public void regist(Map map) {
+		
+		favoriteDao.regist(map);
+	}
+
+	@Override
+	public int select(Map map) {
+		return favoriteDao.select(map);
+	}
+
+	@Override
+	public List favorite(Map map) {
+		// TODO Auto-generated method stub
+		return favoriteDao.favorite(map);
+	}
+
+	@Override
+	public int delete(Map map) {
+		// TODO Auto-generated method stub
+		return favoriteDao.delete(map);
+	}
+
+	@Override
+	public int deleteAll(Map map) {
+		// TODO Auto-generated method stub
+		return favoriteDao.deleteAll(map);
+	}
+
+	@Override
+	public List recentReg(Map map) {
+		// TODO Auto-generated method stub
+		return favoriteDao.recentReg(map);
+	}
+
+	@Override
+	public List rankReg(Map map) {
+		// TODO Auto-generated method stub
+		return favoriteDao.rankReg(map);
+	}
+
+}

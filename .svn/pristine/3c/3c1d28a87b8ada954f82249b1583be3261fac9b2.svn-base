@@ -1,0 +1,101 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/WEB-INF/views/include/headerScript.jsp" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+</head>
+<style type="text/css">
+		body{background:url('../resources/images/sample2.png') 
+		no-repeat center center fixed; -webkit-background-size: cover;-moz-background-size: cover;
+		-o-background-size: cover;background-size: cover;} 
+		}
+</style>
+<body>
+<script type="text/javascript">
+//비밀번호 일치여부확인
+   function isSame() {
+        var pw = document.getElementById("pw").value;
+        var pwck = document.getElementById("pw_check").value;
+        
+        if(pw=='' && pwck=='' ) {
+           document.getElementById("pwsame").innerHTML = '비밀번호를 입력해주세요.';
+           document.getElementById("pwsame").style.color = 'red';
+           $("#update").attr("disabled", true);
+           $("#bye").attr("disabled", true);
+        } else if (pw != pwck && pwck != '') {
+            document.getElementById("pwsame").innerHTML = '비밀번호가 일치하지 않습니다. 다시 입력해 주세요.';
+            document.getElementById("pwsame").style.color = 'red';
+            $("#update").attr("disabled", true);
+            $("#bye").attr("disabled", true);
+        } else  if(pw==pwck) {
+           document.getElementById("pwsame").innerHTML = '비밀번호가 일치합니다.';
+           document.getElementById("pwsame").style.color = 'blue';
+           $("#update").attr("disabled", false);
+           $("#bye").attr("disabled", false);
+        }
+    }
+</script>
+<script type="text/javascript">
+function del(no){
+   if(confirm('삭제하시겠습니까?')){
+      // ajax()가 리퀘스트 보내는것, done()은 받는것 $.ajax({}).done(function(){}); 이러한 형태
+      $.ajax({
+         url : '/member/delete'
+         ,type : 'post'
+         ,data : { m_no : no }      // 뒤에 seq가 delete함수의 매개변수
+      }).done(function(){
+            alert("삭제되었습니다");
+            location.replace('/member/loginForm');         
+      });
+   }
+}
+</script>
+
+<div class="container">
+   
+   <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-8">
+      <h1>회원정보수정</h1><br>   
+      <form class="form-horizontal" action="/member/update" method="post">
+         <input type="hidden" name="m_no" value="${m_no }">
+         <label>아이디</label><input type="text" class="form-control" name="m_id" value="${m_id}" readonly="readonly">
+         <label>비밀번호</label><input type="password" class="form-control" name="m_pw" id="pw" placeholder="비밀번호를 입력해주세요." onkeyup="isSame()" required>
+         <label>비밀번호 확인</label><input type="password" class="form-control" name="pw_check" id="pw_check" placeholder="다시 한번 입력해주세요." onkeyup="isSame()" required>
+         <div id="pwsame" ></div>
+         <label>회원이름</label><input type="text" class="form-control" value="${m_name}" name="m_name" required>
+         <label>이메일</label><input type="text" class="form-control" value="${m_email}" name="m_email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="ex)jasys@naver.com" required><br>
+         <label>연락처</label><input type="text" class="form-control" value="${m_phone}" placeholder="-를 제외한 숫자만 입력하세요." name="m_phone" pattern="^[0-9]*$" required>
+         <label>회원주소</label>
+         <input type="button" class="btn btn-primary" id="postcodify_search_button" value="주소 검색"><br />
+         <input type="text" name="m_p_address" value="${m_p_address}" class="postcodify_postcode5 form-control" readonly required><br />
+         <input type="text" name="m_address" value="${m_address}"  class="postcodify_address form-control"  readonly required><br />
+         <input type="text" name="" value=""  class="postcodify_extra_info form-control"  readonly required><br />
+         <input type="text" name="m_d_address" value="${m_d_address}" class="postcodify_details form-control" value="" required><br />
+         <!-- jQuery와 Postcodify를 로딩한다 -->
+         <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+         <script src="//d1p7wdleee1q2z.cloudfront.net/post/search.min.js"></script>
+            
+         <!-- "검색" 단추를 누르면 팝업 레이어가 열리도록 설정한다 -->
+         <script> $(function() { $("#postcodify_search_button").postcodifyPopUp(); }); </script>
+         
+         
+         <input type="submit" id="update" class="btn btn-default" value="수정">
+      </form>
+      
+
+      <div class="text-right">
+         <input type="button" id="delete" class="btn btn-danger" onclick=del("${m_no }") value="회원탈퇴">
+      </div>
+      </div>
+      <div class="col-md-2"></div>
+   </div>
+</div>
+
+${mem_info }<br>
+${mem_info.m_name }<br>
+${mem_info.m_id }
+</body>
+</html>

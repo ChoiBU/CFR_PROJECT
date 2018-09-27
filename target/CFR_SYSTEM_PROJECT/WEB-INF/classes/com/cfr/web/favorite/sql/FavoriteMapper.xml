@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cfr.web.favorite.sql.FavoriteMapper">
+		<select id="select"  resultType="java.lang.Integer">
+			SELECT COUNT(*)
+			FROM love_cor
+			<if test="m_no != null">
+			WHERE c_no=#{c_no} and m_no=#{m_no}
+			</if>
+			<if test="f_no != null">
+			WHERE c_no=#{c_no} and f_no=#{f_no}
+			</if>
+		</select>
+
+	   <insert id="regist" parameterType="java.util.Map">
+		<if test="m_no != null">
+			INSERT INTO love_cor (
+				m_no
+				,c_no
+			) VALUES (
+				#{m_no}
+				,#{c_no}
+			)
+		</if>
+		<if test="f_no != null">
+			INSERT INTO love_cor (
+				f_no
+				,c_no
+			) VALUES (
+				#{f_no}
+				,#{c_no}
+			)
+		</if>
+   </insert>
+   
+   <select id="favorite" parameterType="map" resultType="map">
+      SELECT *
+      FROM love_cor JOIN cor_info
+      ON love_cor.c_no = cor_info.c_no
+      <if test="m_no != null"> 
+      WHERE love_cor.m_no = #{m_no} 
+      </if>
+      <if test="f_no != null">
+      WHERE love_cor.f_no = #{f_no}
+      </if> 
+   </select>
+   
+   <delete id="delete" parameterType="map">
+   delete from love_cor
+   <if test="f_no == null">
+    	where c_no = #{c_no} and m_no = #{m_no}
+   </if>
+   <if test="m_no == null">
+    	where c_no = #{c_no} and f_no = #{f_no}
+    </if>
+   </delete>
+   
+   <!-- 테스트 -->
+   <delete id="deleteAll" parameterType="map">
+   delete from love_cor
+   <if test="f_no == null">
+    	where m_no = #{m_no}
+   </if>
+   <if test="m_no == null">
+    	where f_no = #{f_no}
+    </if>
+   </delete>
+</mapper>

@@ -1,0 +1,44 @@
+package com.cfr.web.favorite.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.cfr.web.corporation.sql.CorporationMapper;
+import com.cfr.web.favorite.sql.FavoriteMapper;
+
+@Repository
+public class FavoriteDaoImpl implements FavoriteDao{
+
+	@Autowired
+	private SqlSession sqlSession;
+	
+	@Override
+	public void regist(Map map) {
+		FavoriteMapper mapper = sqlSession.getMapper(FavoriteMapper.class);
+		mapper.regist(map);
+		
+	}
+
+	@Override
+	public int select(Map map) {
+		FavoriteMapper mapper = sqlSession.getMapper(FavoriteMapper.class);
+		return mapper.select(map);
+	}
+
+	@Override
+	public List favorite(Map map) {
+		FavoriteMapper mapper = sqlSession.getMapper(FavoriteMapper.class);
+		return mapper.favorite(map);
+	}
+
+	@Override
+	public int delete(Map map) {
+		FavoriteMapper mapper = sqlSession.getMapper(FavoriteMapper.class);
+		return mapper.delete(map);
+	}
+
+}
